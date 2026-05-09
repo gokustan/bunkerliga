@@ -403,24 +403,26 @@ function buildH2H(){
 function showH2H(t1,t2){
   const d=H2H[t1][t2],d2=H2H[t2][t1],tot=d.w+d.d+d.l;
   const wr1=tot?Math.round(d.w/tot*100):0,wr2=tot?Math.round(d2.w/tot*100):0;
-  document.getElementById('hd-title').innerHTML=`${logo(t1,24)} <span style="color:${CLR[t1]}">${t1}</span> <span style="color:var(--txt3);margin:0 6px;font-weight:300">vs</span> ${logo(t2,24)} <span style="color:${CLR[t2]}">${t2}</span>`;
+  const txtClr=(t)=>t==='Güvenspor'?'#777777':CLR[t];
+  const barClr=(t)=>CLR[t];
+  document.getElementById('hd-title').innerHTML=`${logo(t1,24)} <span style="color:${txtClr(t1)}">${t1}</span> <span style="color:var(--txt3);margin:0 6px;font-weight:300">vs</span> ${logo(t2,24)} <span style="color:${txtClr(t2)}">${t2}</span>`;
   document.getElementById('hd-stats').innerHTML=`
-    <div class="hd-stat"><div class="hd-stat-val" style="color:${CLR[t1]}">${d.w}</div><div class="hd-stat-lbl">${t1} galibiyet</div></div>
+    <div class="hd-stat"><div class="hd-stat-val" style="color:${txtClr(t1)}">${d.w}</div><div class="hd-stat-lbl">${t1} galibiyet</div></div>
     <div class="hd-stat"><div class="hd-stat-val" style="color:var(--txt2)">${d.d}</div><div class="hd-stat-lbl">Beraberlik</div></div>
-    <div class="hd-stat"><div class="hd-stat-val" style="color:${CLR[t2]}">${d2.w}</div><div class="hd-stat-lbl">${t2} galibiyet</div></div>
+    <div class="hd-stat"><div class="hd-stat-val" style="color:${txtClr(t2)}">${d2.w}</div><div class="hd-stat-lbl">${t2} galibiyet</div></div>
     <div class="hd-stat"><div class="hd-stat-val">${tot}</div><div class="hd-stat-lbl">Toplam maç</div></div>
     <div class="hd-stat"><div class="hd-stat-val">${d.gf}</div><div class="hd-stat-lbl">${t1} golü</div></div>
     <div class="hd-stat"><div class="hd-stat-val">${d2.gf}</div><div class="hd-stat-lbl">${t2} golü</div></div>
     <div style="flex-basis:100%;margin-top:4px">
       <div class="hd-bar-labels">
-        <span style="color:${CLR[t1]}">${t1} — ${wr1}%</span>
+        <span style="color:${txtClr(t1)}">${t1} — ${wr1}%</span>
         <span style="color:var(--txt3);font-size:10px">${Math.round(d.d/tot*100)}% BER</span>
-        <span style="color:${CLR[t2]}">${wr2}% — ${t2}</span>
+        <span style="color:${txtClr(t2)}">${wr2}% — ${t2}</span>
       </div>
       <div class="hd-bar" style="display:flex;gap:2px">
-        <div style="height:100%;border-radius:3px 0 0 3px;width:${wr1}%;background:${CLR[t1]};flex-shrink:0"></div>
+        <div style="height:100%;border-radius:3px 0 0 3px;width:${wr1}%;background:${barClr(t1)};flex-shrink:0"></div>
         <div style="height:100%;width:${Math.round(d.d/tot*100)}%;background:var(--txt3);flex-shrink:0"></div>
-        <div style="height:100%;border-radius:0 3px 3px 0;width:${wr2}%;background:${CLR[t2]};flex-shrink:0;margin-left:auto"></div>
+        <div style="height:100%;border-radius:0 3px 3px 0;width:${wr2}%;background:${barClr(t2)};flex-shrink:0;margin-left:auto"></div>
       </div>
     </div>`;
   document.getElementById('hdet').classList.add('vis');
