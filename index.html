@@ -103,6 +103,12 @@ body{background:
 .chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:2rem}
 .chart-title{font-family:"Bebas Neue",sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--txt2);margin-bottom:14px}
 
+
+/* --- TROPHY TOOLTIP --- */
+.trophy-tip{position:relative;cursor:default;font-size:14px;letter-spacing:2px}
+.trophy-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a2040;color:#fff;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:0.06em;white-space:nowrap;padding:4px 8px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10}
+.trophy-tip::before{content:"";position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1a2040;pointer-events:none;opacity:0;transition:opacity .15s}
+.trophy-tip:hover::after,.trophy-tip:hover::before{opacity:1}
 /* --- SEASON SELECTOR --- */
 .season-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem}
 .sbtn{background:none;border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;letter-spacing:0.04em;transition:all .15s}
@@ -251,6 +257,13 @@ function showTab(id,btn){
   btn.classList.add('active');
 }
 
+const CUP_TITLES={
+  "Göktuğspor":["4. Bunkerliga"],
+  "Seyranspor":["1. Bunkerliga"],
+  "Emrespor":["2. Bunkerliga","3. Bunkerliga","29 Ekim Kupası"],
+  "Batuspor":[],
+  "Güvenspor":[]
+};
 // OVERVIEW
 function buildOverview(){
   // Cup grid
@@ -263,7 +276,7 @@ function buildOverview(){
       <div class="cup-name">${t}</div>
       <div class="${c>0?'cup-count':'cup-count zero'}">${c}</div>
       <div class="cup-label">${c===0?'kupa yok':'kupa'}</div>
-      ${c>0?`<div class="trophy-icons">${'🏆'.repeat(c)}</div>`:''}
+      ${c>0?`<div class="trophy-icons">${CUP_TITLES[t].map(cup=>`<span class="trophy-tip" data-tip="${cup}">🏆</span>`).join('')}</div>`:''}
     </div>`;
   });
 
@@ -413,18 +426,18 @@ function showH2H(t1,t2){
       if((m[0]===t1&&m[2]===t2)||(m[0]===t2&&m[2]===t1)){
         const hW=m[1]>m[3],aW=m[3]>m[1];
         const isI=sName==='5. Bunkerliga'&&m[1]===13&&m[3]===0;
-        matchRows+=`<div class="mrow" style="font-size:12px;padding:6px 10px">
-          <span style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 7px;border-radius:4px;min-width:80px;text-align:center;flex-shrink:0">${sName}</span>
-          <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:5px;font-weight:${hW?'600':'400'};color:${hW?'var(--txt)':'var(--txt2)'}">
-            <span>${m[0]}</span>
-            <img src="${LOGOS[m[0]]||''}" width="16" height="16" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
+        matchRows+=`<div class="mrow" style="font-size:12px;padding:6px 8px;min-width:0;overflow:hidden">
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:68px;max-width:68px;text-align:center;flex-shrink:0;overflow:hidden;white-space:nowrap">${sName}</span>
+          <div style="flex:1;min-width:0;display:flex;align-items:center;justify-content:flex-end;gap:4px;font-weight:${hW?'600':'400'};color:${hW?'var(--txt)':'var(--txt2)'}">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">${m[0]}</span>
+            <img src="${LOGOS[m[0]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
           </div>
-          <span class="mscore" style="font-size:1rem">${m[1]} – ${m[3]}</span>
-          <div style="flex:1;display:flex;align-items:center;gap:5px;font-weight:${aW?'600':'400'};color:${aW?'var(--txt)':'var(--txt2)'}">
-            <img src="${LOGOS[m[2]]||''}" width="16" height="16" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
-            <span>${m[2]}</span>
+          <span class="mscore" style="font-size:1rem;flex-shrink:0">${m[1]} – ${m[3]}</span>
+          <div style="flex:1;min-width:0;display:flex;align-items:center;gap:4px;font-weight:${aW?'600':'400'};color:${aW?'var(--txt)':'var(--txt2)'}">
+            <img src="${LOGOS[m[2]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
+            <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">${m[2]}</span>
           </div>
-          ${isI?'<span class="mike">⚠ ŞİKE</span>':''}
+          ${isI?'<span class="mike" style="flex-shrink:0">⚠ ŞİKE</span>':''}
         </div>`;
       }
     });
