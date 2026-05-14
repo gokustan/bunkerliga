@@ -351,8 +351,8 @@ function renderST(){
   sd.table.forEach((row,i)=>{
     const isc=sd.champion===row[0];
     html+=`<tr class="${isc?'cr':''}">
-      <td><span class="pos-badge${i===0?' p1':''}">${i+1}</span></td>
-      <td><div class="tcell">${logo(row[0],22)}<span>${row[0]}${isc?' 🏆':''}</span></div></td>`;
+      <td><span class="pos-badge${i===0&&sd.champion?' p1':''}">${i+1}</span></td>
+      <td><div class="tcell">${logo(row[0],22)}<span>${row[0]}</span></div></td>`;
     for(let j=1;j<row.length;j++){
       const v=row[j];
       let cls='';
