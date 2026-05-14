@@ -420,6 +420,14 @@ function showH2H(t1,t2){
   document.getElementById('hd-title').innerHTML=`${logo(t1,24)} <span style="color:${txtClr(t1)}">${t1}</span> <span style="color:var(--txt3);margin:0 6px;font-weight:300">vs</span> ${logo(t2,24)} <span style="color:${txtClr(t2)}">${t2}</span>`;
 
   // Collect all matches between t1 and t2
+  const abbr={
+    "1. Bunkerliga":"1BL","2. Bunkerliga":"2BL","3. Bunkerliga":"3BL",
+    "4. Bunkerliga":"4BL","5. Bunkerliga":"5BL","29 Ekim Kupası":"29K"
+  };
+  const tabbr={
+    "Göktuğspor":"GOK","Emrespor":"EMR","Batuspor":"BAT",
+    "Seyranspor":"SEY","Güvenspor":"GUV"
+  };
   let matchRows='';
   Object.entries(SEASONS).forEach(([sName, sd])=>{
     sd.matches.forEach(m=>{
@@ -427,15 +435,15 @@ function showH2H(t1,t2){
         const hW=m[1]>m[3],aW=m[3]>m[1];
         const isI=sName==='5. Bunkerliga'&&m[1]===13&&m[3]===0;
         matchRows+=`<div class="mrow" style="font-size:12px;padding:6px 10px;width:100%">
-          <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0">${sName}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0">${abbr[sName]||sName}</span>
           <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:4px;font-weight:${hW?'600':'400'};color:${hW?'var(--txt)':'var(--txt2)'}">
-            <span style="white-space:nowrap">${m[0]}</span>
+            <span style="white-space:nowrap">${tabbr[m[0]]||m[0]}</span>
             <img src="${LOGOS[m[0]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
           </div>
           <span class="mscore" style="font-size:1rem;flex-shrink:0">${m[1]} – ${m[3]}</span>
           <div style="flex:1;display:flex;align-items:center;gap:4px;font-weight:${aW?'600':'400'};color:${aW?'var(--txt)':'var(--txt2)'}">
             <img src="${LOGOS[m[2]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
-            <span style="white-space:nowrap">${m[2]}</span>
+            <span style="white-space:nowrap">${tabbr[m[2]]||m[2]}</span>
           </div>
           ${isI?'<span class="mike" style="flex-shrink:0">⚠ ŞİKE</span>':''}
         </div>`;
