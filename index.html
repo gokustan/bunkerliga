@@ -71,14 +71,14 @@ body{background:
 
 /* --- CHAMPS LIST --- */
 .champs{display:flex;flex-direction:column;gap:8px;margin-bottom:2.5rem}
-.champ-row{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 16px;transition:border-color .2s}
+.champ-row{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color .2s;flex-wrap:nowrap}
 .champ-row:hover{border-color:var(--border2)}
 .champ-row.winner{border-color:rgba(245,200,66,0.2)}
-.champ-badge{font-family:"Bebas Neue",sans-serif;font-size:11px;letter-spacing:0.15em;color:var(--txt3);min-width:130px}
+.champ-badge{font-family:"Bebas Neue",sans-serif;font-size:11px;letter-spacing:0.12em;color:var(--txt3);min-width:120px;flex-shrink:0}
 .champ-logo{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4))}
 .champ-logo-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0}
 .champ-team{font-size:14px;font-weight:600;color:var(--txt)}
-.champ-trophy{margin-left:auto;font-size:18px}
+.champ-trophy{margin-left:auto;font-size:18px;flex-shrink:0}
 .champ-note{font-size:12px;color:var(--txt3);font-style:italic;margin-left:auto}
 .champ-row.scandal{border-color:rgba(232,65,65,0.2);background:rgba(232,65,65,0.04)}
 
@@ -175,7 +175,6 @@ table.h2h{border-collapse:collapse;min-width:520px;width:100%;font-size:12px}
 <div class="header">
   <img src="https://i.imgur.com/UBxXRiM.png" style="width:90px;height:90px;object-fit:contain;filter:drop-shadow(0 0 20px rgba(79,143,255,0.4)) brightness(1.8);margin-bottom:8px;display:block;margin-left:auto;margin-right:auto" alt="Bunkerliga">
   <div class="header-title">BUNKERLIGA</div>
-  <div class="header-sub">5 Sezon &nbsp;·&nbsp; 1 Kupa Turnuvası &nbsp;·&nbsp; 72 Maç</div>
   <div class="header-divider"></div>
 </div>
 
@@ -344,9 +343,9 @@ function renderST(){
     for(let j=1;j<row.length;j++){
       const v=row[j];
       let cls='';
-      if(j===8&&v>0)cls='val-pos';
-      else if(j===8&&v<0)cls='val-neg';
-      else if(j===9)cls='val-pts';
+      if(j===7&&v>0)cls='val-pos';
+      else if(j===7&&v<0)cls='val-neg';
+      else if(j===8)cls='val-pts';
       html+=`<td class="${cls}">${v}</td>`;
     }
     html+=`</tr>`;
@@ -450,9 +449,9 @@ function showH2H(t1,t2){
         <div style="height:100%;border-radius:0 3px 3px 0;width:${wr2}%;background:${barClr(t2)};flex-shrink:0;margin-left:auto"></div>
       </div>
     </div>
-    <div style="flex-basis:100%;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
+    <div style="flex-basis:100%;margin-top:12px;border-top:1px solid var(--border);padding-top:12px;overflow-x:auto">
       <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">Karşılaşmalar</div>
-      <div class="mlist">${matchRows}</div>
+      <div class="mlist" style="min-width:320px">${matchRows}</div>
     </div>`;
   document.getElementById('hdet').classList.add('vis');
 }
