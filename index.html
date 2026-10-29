@@ -57,7 +57,7 @@ body{background:
 
 /* --- CUP CARDS --- */
 .cup-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:2.5rem}
-.cup-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;position:relative;overflow:hidden;transition:transform .2s,border-color .2s}
+.cup-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px 14px;text-align:center;position:relative;transition:transform .2s,border-color .2s}
 .cup-card:hover{transform:translateY(-3px);border-color:var(--border2)}
 .cup-card.has-cups{border-color:rgba(245,200,66,0.25)}
 .cup-card.has-cups::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(245,200,66,0.07),transparent);pointer-events:none}
@@ -99,11 +99,14 @@ body{background:
 .ocard-bar{height:3px;border-radius:2px;background:var(--bg4);margin-top:10px;overflow:hidden}
 .ocard-bar-fill{height:100%;border-radius:2px;transition:width .6s ease}
 
+/* --- CHART --- */
+.chart-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:2rem}
+.chart-title{font-family:"Bebas Neue",sans-serif;font-size:1rem;letter-spacing:0.1em;color:var(--txt2);margin-bottom:14px}
+
+
 /* --- TROPHY TOOLTIP --- */
-.trophy-tip{position:relative;cursor:default;font-size:14px;letter-spacing:2px}
-.trophy-tip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a2040;color:#fff;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:0.06em;white-space:nowrap;padding:4px 8px;border-radius:5px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:10}
-.trophy-tip::before{content:"";position:absolute;bottom:calc(100% + 1px);left:50%;transform:translateX(-50%);border:4px solid transparent;border-top-color:#1a2040;pointer-events:none;opacity:0;transition:opacity .15s}
-.trophy-tip:hover::after,.trophy-tip:hover::before{opacity:1}
+.trophy-tip{cursor:default;font-size:14px;letter-spacing:2px}
+#bl-tooltip{position:fixed;background:#1a2040;color:#fff;font-family:"DM Sans",sans-serif;font-size:10px;font-weight:600;letter-spacing:0.06em;white-space:nowrap;padding:4px 8px;border-radius:5px;pointer-events:none;z-index:9999;display:none;transform:translateX(-50%)}
 /* --- SEASON SELECTOR --- */
 .season-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.5rem}
 .sbtn{background:none;border:1px solid var(--border);border-radius:6px;padding:6px 14px;font-family:"DM Sans",sans-serif;font-size:12px;font-weight:500;color:var(--txt2);cursor:pointer;letter-spacing:0.04em;transition:all .15s}
@@ -122,6 +125,7 @@ table.st{width:100%;border-collapse:collapse;font-size:13px}
 .st tr:hover td{background:rgba(255,255,255,0.03)}
 .pos-badge{width:22px;height:22px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:var(--bg4);color:var(--txt3)}
 .pos-badge.p1{background:rgba(245,200,66,0.2);color:var(--gold)}
+.pos-badge.p2{background:rgba(245,200,66,0.1);color:var(--gold)}
 .tcell{display:flex;align-items:center;gap:8px}
 .tcell-logo{width:22px;height:22px;object-fit:contain}
 .tcell-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
@@ -223,13 +227,21 @@ const LOGOS = {
 };
 const TEAMS=["Göktuğspor","Emrespor","Batuspor","Seyranspor","Güvenspor"];
 const CLR={"Göktuğspor":"#0E416A","Emrespor":"#FF3DF2","Batuspor":"#00FFFF","Seyranspor":"#FF1B0A","Güvenspor":"#F3FF47"};
-const CUPS={"Emrespor":3,"Seyranspor":1,"Göktuğspor":1,"Batuspor":0,"Güvenspor":0};
-const CHAMPS=[{s:"1. Bunkerliga",c:"Seyranspor"},{s:"2. Bunkerliga",c:"Emrespor"},{s:"3. Bunkerliga",c:"Emrespor"},{s:"4. Bunkerliga",c:"Göktuğspor"},{s:"5. Bunkerliga",c:null,note:"Şike (13-0) · Şampiyon ilan edilmedi"},{s:"29 Ekim Kupası",c:"Emrespor"}];
-const OVERALL={"Göktuğspor":{p:40,w:21,d:6,l:13,gf:110,ga:85},"Emrespor":{p:40,w:23,d:9,l:8,gf:152,ga:72},"Batuspor":{p:40,w:3,d:4,l:33,gf:84,ga:191},"Seyranspor":{p:34,w:14,d:7,l:13,gf:94,ga:113},"Güvenspor":{p:22,w:12,d:4,l:6,gf:69,ga:48}};
+const CUPS={"Emrespor":4,"Seyranspor":1,"Göktuğspor":1,"Batuspor":0,"Güvenspor":0};
+const CHAMPS=[
+  {s:"1. Bunkerliga",d:"18 Mayıs 2024",c:"Seyranspor"},
+  {s:"2. Bunkerliga",d:"19 Mayıs 2024",c:"Emrespor"},
+  {s:"3. Bunkerliga",d:"25 Mayıs 2024",c:"Emrespor"},
+  {s:"4. Bunkerliga",d:"20 Ekim 2024",c:"Göktuğspor"},
+  {s:"29 Ekim Kupası (2024)",d:"28 Ekim 2024",c:"Emrespor"},
+  {s:"5. Bunkerliga",d:"19 Ekim 2025",c:null,note:"Şike (13-0) · Şampiyon ilan edilmedi"},
+  {s:"29 Ekim Kupası (2026)",d:"28 Ekim 2026",c:"Emrespor"},
+];
+const OVERALL={"Göktuğspor":{p:45,w:23,d:7,l:15,gf:123,ga:94},"Emrespor":{p:45,w:26,d:10,l:9,gf:164,ga:81},"Batuspor":{p:44,w:4,d:4,l:36,gf:92,ga:206},"Seyranspor":{p:34,w:14,d:7,l:13,gf:94,ga:113},"Güvenspor":{p:22,w:12,d:4,l:6,gf:69,ga:48}};
 const H2H={
-  "Göktuğspor":{"Emrespor":{w:4,d:3,l:5,gf:26,ga:28},"Batuspor":{w:12,d:0,l:0,gf:52,ga:25},"Seyranspor":{w:4,d:1,l:5,gf:24,ga:18},"Güvenspor":{w:1,d:2,l:3,gf:8,ga:14}},
-  "Emrespor":{"Göktuğspor":{w:5,d:3,l:4,gf:28,ga:26},"Batuspor":{w:10,d:2,l:0,gf:63,ga:14},"Seyranspor":{w:5,d:3,l:2,gf:42,ga:17},"Güvenspor":{w:3,d:1,l:2,gf:19,ga:15}},
-  "Batuspor":{"Göktuğspor":{w:0,d:0,l:12,gf:25,ga:52},"Emrespor":{w:0,d:2,l:10,gf:14,ga:63},"Seyranspor":{w:2,d:2,l:6,gf:34,ga:49},"Güvenspor":{w:1,d:0,l:5,gf:11,ga:27}},
+  "Göktuğspor":{"Emrespor":{w:4,d:4,l:7,gf:30,ga:34},"Batuspor":{w:14,d:0,l:0,gf:61,ga:28},"Seyranspor":{w:4,d:1,l:5,gf:24,ga:18},"Güvenspor":{w:1,d:2,l:3,gf:8,ga:14}},
+  "Emrespor":{"Göktuğspor":{w:7,d:4,l:4,gf:34,ga:30},"Batuspor":{w:11,d:2,l:1,gf:69,ga:19},"Seyranspor":{w:5,d:3,l:2,gf:42,ga:17},"Güvenspor":{w:3,d:1,l:2,gf:19,ga:15}},
+  "Batuspor":{"Göktuğspor":{w:0,d:0,l:14,gf:28,ga:61},"Emrespor":{w:1,d:2,l:11,gf:19,ga:69},"Seyranspor":{w:2,d:2,l:6,gf:34,ga:49},"Güvenspor":{w:1,d:0,l:5,gf:11,ga:27}},
   "Seyranspor":{"Göktuğspor":{w:5,d:1,l:4,gf:18,ga:24},"Emrespor":{w:2,d:3,l:5,gf:17,ga:42},"Batuspor":{w:6,d:2,l:2,gf:49,ga:34},"Güvenspor":{w:1,d:1,l:2,gf:10,ga:13}},
   "Güvenspor":{"Göktuğspor":{w:3,d:2,l:1,gf:14,ga:8},"Emrespor":{w:2,d:1,l:3,gf:15,ga:19},"Batuspor":{w:5,d:0,l:1,gf:27,ga:11},"Seyranspor":{w:2,d:1,l:1,gf:13,ga:10}},
 };
@@ -238,8 +250,12 @@ const SEASONS={
 "2. Bunkerliga":{date:"19 Mayıs 2024",matches:[["Göktuğspor",2,"Güvenspor",2],["Seyranspor",4,"Batuspor",4],["Göktuğspor",2,"Emrespor",4],["Seyranspor",2,"Güvenspor",4],["Seyranspor",0,"Emrespor",3],["Batuspor",0,"Güvenspor",5],["Göktuğspor",2,"Seyranspor",0],["Batuspor",1,"Emrespor",8],["Göktuğspor",6,"Batuspor",5],["Güvenspor",2,"Emrespor",5],["Güvenspor",4,"Göktuğspor",3],["Batuspor",3,"Seyranspor",1],["Emrespor",6,"Göktuğspor",2],["Güvenspor",5,"Seyranspor",3],["Emrespor",2,"Seyranspor",3],["Güvenspor",6,"Batuspor",2],["Seyranspor",6,"Göktuğspor",2],["Emrespor",8,"Batuspor",1],["Batuspor",2,"Göktuğspor",4],["Emrespor",4,"Güvenspor",4]],table:[["Emrespor",8,6,1,1,40,15,25,19],["Güvenspor",8,5,2,1,32,21,11,17],["Göktuğspor",8,3,1,4,23,29,-6,10],["Seyranspor",8,2,1,5,19,25,-6,7],["Batuspor",8,1,1,6,18,42,-24,4]],champion:"Emrespor"},
 "3. Bunkerliga":{date:"25 Mayıs 2024",matches:[["Güvenspor",3,"Seyranspor",4],["Batuspor",1,"Göktuğspor",5],["Güvenspor",0,"Emrespor",2],["Batuspor",6,"Seyranspor",7],["Batuspor",1,"Emrespor",6],["Göktuğspor",3,"Seyranspor",1],["Güvenspor",6,"Batuspor",3],["Göktuğspor",1,"Emrespor",7],["Güvenspor",3,"Göktuğspor",1],["Seyranspor",2,"Emrespor",2],["Seyranspor",1,"Güvenspor",1],["Göktuğspor",4,"Batuspor",3],["Emrespor",1,"Güvenspor",4],["Seyranspor",6,"Batuspor",1],["Emrespor",7,"Batuspor",1],["Seyranspor",2,"Göktuğspor",1],["Batuspor",5,"Güvenspor",3],["Emrespor",1,"Göktuğspor",2],["Göktuğspor",0,"Güvenspor",4],["Emrespor",5,"Seyranspor",0]],table:[["Emrespor",8,5,1,2,31,11,20,16],["Seyranspor",8,4,2,2,23,22,1,14],["Güvenspor",8,4,1,3,24,17,7,13],["Göktuğspor",8,4,0,4,17,22,-5,12],["Batuspor",8,1,0,7,21,44,-23,3]],champion:"Emrespor"},
 "4. Bunkerliga":{date:"20 Ekim 2024",matches:[["Göktuğspor",0,"Seyranspor",0],["Batuspor",3,"Emrespor",7],["Batuspor",0,"Göktuğspor",4],["Emrespor",4,"Seyranspor",0],["Batuspor",5,"Seyranspor",5],["Emrespor",2,"Göktuğspor",2],["Seyranspor",0,"Göktuğspor",4],["Emrespor",2,"Batuspor",2],["Göktuğspor",2,"Batuspor",1],["Seyranspor",5,"Emrespor",5],["Seyranspor",7,"Batuspor",8],["Göktuğspor",2,"Emrespor",2]],table:[["Göktuğspor",6,3,3,0,14,5,9,12],["Emrespor",6,2,4,0,22,14,8,10],["Batuspor",6,1,2,3,19,27,-8,5],["Seyranspor",6,0,3,3,17,26,-9,3]],champion:"Göktuğspor"},
+"29 Ekim Kupası (2024)":{date:"28 Ekim 2024",matches:[["Emrespor",7,"Batuspor",0],["Güvenspor",0,"Göktuğspor",1],["Güvenspor",3,"Emrespor",2],["Göktuğspor",4,"Batuspor",0],["Güvenspor",4,"Batuspor",0],["Göktuğspor",2,"Emrespor",3],["Batuspor",0,"Emrespor",2],["Göktuğspor",1,"Güvenspor",1],["Emrespor",5,"Güvenspor",2],["Batuspor",1,"Göktuğspor",4],["Batuspor",1,"Güvenspor",3],["Emrespor",1,"Göktuğspor",0]],table:[["Emrespor",6,5,0,1,20,7,13,15],["Göktuğspor",6,3,1,2,12,6,6,10],["Güvenspor",6,3,1,2,13,10,3,10],["Batuspor",6,0,0,6,2,24,-22,0]],champion:"Emrespor"},
 "5. Bunkerliga":{date:"19 Ekim 2025",matches:[["Göktuğspor",5,"Emrespor",0],["Seyranspor",3,"Batuspor",2],["Seyranspor",4,"Göktuğspor",2],["Batuspor",1,"Emrespor",3],["Seyranspor",1,"Emrespor",3],["Batuspor",0,"Göktuğspor",3],["Emrespor",1,"Göktuğspor",1],["Batuspor",2,"Seyranspor",8],["Göktuğspor",8,"Seyranspor",0],["Emrespor",6,"Batuspor",0],["Emrespor",13,"Seyranspor",0],["Göktuğspor",6,"Batuspor",5]],table:[["Emrespor",6,4,1,1,26,8,18,13],["Göktuğspor",6,4,1,1,25,10,15,13],["Seyranspor",6,3,0,3,16,30,-14,9],["Batuspor",6,0,0,6,10,29,-19,0]],champion:null,note:"13-0 şike nedeniyle şampiyon ilan edilmedi"},
-"29 Ekim Kupası":{date:"28 Ekim 2024",matches:[["Emrespor",7,"Batuspor",0],["Güvenspor",0,"Göktuğspor",1],["Güvenspor",3,"Emrespor",2],["Göktuğspor",4,"Batuspor",0],["Güvenspor",4,"Batuspor",0],["Göktuğspor",2,"Emrespor",3],["Batuspor",0,"Emrespor",2],["Göktuğspor",1,"Güvenspor",1],["Emrespor",5,"Güvenspor",2],["Batuspor",1,"Göktuğspor",4],["Batuspor",1,"Güvenspor",3],["Emrespor",1,"Göktuğspor",0]],table:[["Emrespor",6,5,0,1,20,7,13,15],["Göktuğspor",6,3,1,2,12,6,6,10],["Güvenspor",6,3,1,2,13,10,3,10],["Batuspor",6,0,0,6,2,24,-22,0]],champion:"Emrespor"}
+"29 Ekim Kupası (2026)":{date:"28 Ekim 2026",
+matches:[["Göktuğspor",4,"Batuspor",0],["Emrespor",3,"Göktuğspor",2],["Emrespor",4,"Batuspor",1],["Batuspor",3,"Göktuğspor",5],["Göktuğspor",1,"Emrespor",1],["Batuspor",4,"Emrespor",2],["Göktuğspor",1,"Emrespor",2,"FİNAL"]],
+table:[["Göktuğspor",4,2,1,1,12,7,5,7],["Emrespor",4,2,1,1,10,8,2,7],["Batuspor",4,1,0,3,8,15,-7,3]],
+champion:"Emrespor",note:"Lig aşaması sonrası Göktuğspor–Emrespor finali: 1–2 (Altın Gol)"}
 };
 
 function logo(t,s){const l=LOGOS[t];if(!l)return`<span class="tcell-dot" style="width:${s}px;height:${s}px;border-radius:50%;background:${CLR[t]||'#888'}"></span>`;return`<img src="${l}" width="${s}" height="${s}" style="object-fit:contain;flex-shrink:0;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5))" alt="">`;}
@@ -255,7 +271,7 @@ function showTab(id,btn){
 const CUP_TITLES={
   "Göktuğspor":["4. Bunkerliga"],
   "Seyranspor":["1. Bunkerliga"],
-  "Emrespor":["2. Bunkerliga","3. Bunkerliga","29 Ekim Kupası"],
+  "Emrespor":["2. Bunkerliga","3. Bunkerliga","29 Ekim Kupası (2024)","29 Ekim Kupası (2026)"],
   "Batuspor":[],
   "Güvenspor":[]
 };
@@ -281,6 +297,7 @@ function buildOverview(){
     if(ch.c){
       cl.innerHTML+=`<div class="champ-row winner">
         <span class="champ-badge">${ch.s}</span>
+        <span style="font-size:10px;color:var(--txt3);white-space:nowrap;flex-shrink:0">${ch.d}</span>
         ${logo(ch.c,30)}
         <span class="champ-team">${ch.c}</span>
         <span class="champ-trophy">🏆</span>
@@ -288,6 +305,7 @@ function buildOverview(){
     }else{
       cl.innerHTML+=`<div class="champ-row scandal">
         <span class="champ-badge">${ch.s}</span>
+        <span style="font-size:10px;color:var(--txt3);white-space:nowrap;flex-shrink:0">${ch.d}</span>
         <span style="font-size:16px">⚠️</span>
         <span class="champ-note">${ch.note}</span>
       </div>`;
@@ -345,8 +363,9 @@ function renderST(){
   html+=`<div class="tbl-wrap"><table class="st"><thead><tr><th>#</th><th>Takım</th><th>OM</th><th>G</th><th>B</th><th>M</th><th>AG</th><th>YG</th><th>A</th><th>P</th></tr></thead><tbody>`;
   sd.table.forEach((row,i)=>{
     const isc=sd.champion===row[0];
-    html+=`<tr class="${isc?'cr':''}">
-      <td><span class="pos-badge${i===0&&sd.champion?' p1':''}">${i+1}</span></td>
+    const isTop2=actS==='29 Ekim Kupası (2026)'&&i<2;
+    html+=`<tr class="${isc||isTop2?'cr':''}">
+      <td><span class="pos-badge${i===0&&sd.champion?' p1':isTop2&&i===1?' p2':''}">${i+1}</span></td>
       <td><div class="tcell">${logo(row[0],22)}<span>${row[0]}</span></div></td>`;
     for(let j=1;j<row.length;j++){
       const v=row[j];
@@ -366,12 +385,13 @@ function renderST(){
   html+=`<div class="mlist">`;
   sd.matches.forEach(m=>{
     const isI=actS==='5. Bunkerliga'&&m[1]===13&&m[3]===0;
+    const isFinal=m[4]==='FİNAL';
     const hW=m[1]>m[3],aW=m[3]>m[1];
     const hcol=hW?'var(--txt)':'var(--txt2)';
     const acol=aW?'var(--txt)':'var(--txt2)';
     const hw=hW?'font-weight:600':'';
     const aw=aW?'font-weight:600':'';
-    html+=`<div class="mrow">
+    html+=`<div class="mrow" style="${isFinal?'border-color:var(--gold);background:rgba(245,200,66,0.06)':''}">
       <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:6px;color:${hcol};font-size:12px;${hw}">
         <span>${m[0]}</span>
         <img src="${LOGOS[m[0]]||''}" width="18" height="18" style="object-fit:contain;display:inline-block;flex-shrink:0" onerror="this.style.display='none'" alt="">
@@ -381,7 +401,7 @@ function renderST(){
         <img src="${LOGOS[m[2]]||''}" width="18" height="18" style="object-fit:contain;display:inline-block;flex-shrink:0" onerror="this.style.display='none'" alt="">
         <span>${m[2]}</span>
       </div>
-      ${isI?'<span class="mike">⚠ ŞİKE</span>':''}
+      ${isI?'<span class="mike">⚠ ŞİKE</span>':''}${isFinal?'<span style="font-size:10px;font-weight:700;letter-spacing:0.08em;color:var(--gold);background:rgba(245,200,66,0.15);padding:2px 7px;border-radius:4px;flex-shrink:0">FİNAL</span>':''}
     </div>`;
   });
   html+=`</div></div>`;
@@ -411,36 +431,31 @@ function showH2H(t1,t2){
   const d=H2H[t1][t2],d2=H2H[t2][t1],tot=d.w+d.d+d.l;
   const wr1=tot?Math.round(d.w/tot*100):0,wr2=tot?Math.round(d2.w/tot*100):0;
   const txtClr=(t)=>t==='Güvenspor'?'#777777':CLR[t];
-  const barClr=(t)=>CLR[t];
-  document.getElementById('hd-title').innerHTML=`${logo(t1,24)} <span style="color:${txtClr(t1)}">${t1}</span> <span style="color:var(--txt3);margin:0 6px;font-weight:300">vs</span> ${logo(t2,24)} <span style="color:${txtClr(t2)}">${t2}</span>`;
+  const sAbbr={"1. Bunkerliga":"1BL","2. Bunkerliga":"2BL","3. Bunkerliga":"3BL","4. Bunkerliga":"4BL","5. Bunkerliga":"5BL","29 Ekim Kupası (2024)":"29K24","29 Ekim Kupası (2026)":"29K26"};
+  const tAbbr={"Göktuğspor":"GOK","Emrespor":"EMR","Batuspor":"BAT","Seyranspor":"SEY","Güvenspor":"GUV"};
 
-  // Collect all matches between t1 and t2
-  const abbr={
-    "1. Bunkerliga":"1BL","2. Bunkerliga":"2BL","3. Bunkerliga":"3BL",
-    "4. Bunkerliga":"4BL","5. Bunkerliga":"5BL","29 Ekim Kupası":"29K"
-  };
-  const tabbr={
-    "Göktuğspor":"GOK","Emrespor":"EMR","Batuspor":"BAT",
-    "Seyranspor":"SEY","Güvenspor":"GUV"
-  };
+  document.getElementById('hd-title').innerHTML=`${logo(t1,24)} <span style="color:${txtClr(t1)}">${t1}</span> <span style="color:var(--txt3);margin:0 6px;font-weight:300">vs</span> ${logo(t2,24)} <span style="color:${CLR[t2]}">${t2}</span>`;
+
+  // Collect all matches chronologically
   let matchRows='';
-  Object.entries(SEASONS).forEach(([sName, sd])=>{
+  Object.entries(SEASONS).forEach(([sName,sd])=>{
     sd.matches.forEach(m=>{
       if((m[0]===t1&&m[2]===t2)||(m[0]===t2&&m[2]===t1)){
         const hW=m[1]>m[3],aW=m[3]>m[1];
         const isI=sName==='5. Bunkerliga'&&m[1]===13&&m[3]===0;
+        const tag=sAbbr[sName]||sName;
         matchRows+=`<div class="mrow" style="font-size:12px;padding:6px 10px;width:100%">
-          <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0">${abbr[sName]||sName}</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0">${tag}</span>
           <div style="flex:1;display:flex;align-items:center;justify-content:flex-end;gap:4px;font-weight:${hW?'600':'400'};color:${hW?'var(--txt)':'var(--txt2)'}">
-            <span style="white-space:nowrap">${tabbr[m[0]]||m[0]}</span>
+            <span style="white-space:nowrap">${tAbbr[m[0]]||m[0]}</span>
             <img src="${LOGOS[m[0]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
           </div>
-          <span class="mscore" style="font-size:1rem;flex-shrink:0">${m[1]} – ${m[3]}</span>
+          <span class="mscore" style="font-size:1rem;flex-shrink:0">${m[1]} \u2013 ${m[3]}</span>
           <div style="flex:1;display:flex;align-items:center;gap:4px;font-weight:${aW?'600':'400'};color:${aW?'var(--txt)':'var(--txt2)'}">
             <img src="${LOGOS[m[2]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
-            <span style="white-space:nowrap">${tabbr[m[2]]||m[2]}</span>
+            <span style="white-space:nowrap">${tAbbr[m[2]]||m[2]}</span>
           </div>
-          ${isI?'<span class="mike" style="flex-shrink:0">⚠ ŞİKE</span>':''}
+          ${isI?'<span class="mike">\u26a0 \u015e\u0130KE</span>':''}
         </div>`;
       }
     });
@@ -450,23 +465,23 @@ function showH2H(t1,t2){
     <div class="hd-stat"><div class="hd-stat-val" style="color:${txtClr(t1)}">${d.w}</div><div class="hd-stat-lbl">${t1} galibiyet</div></div>
     <div class="hd-stat"><div class="hd-stat-val" style="color:var(--txt2)">${d.d}</div><div class="hd-stat-lbl">Beraberlik</div></div>
     <div class="hd-stat"><div class="hd-stat-val" style="color:${txtClr(t2)}">${d2.w}</div><div class="hd-stat-lbl">${t2} galibiyet</div></div>
-    <div class="hd-stat"><div class="hd-stat-val">${tot}</div><div class="hd-stat-lbl">Toplam maç</div></div>
-    <div class="hd-stat"><div class="hd-stat-val">${d.gf}</div><div class="hd-stat-lbl">${t1} golü</div></div>
-    <div class="hd-stat"><div class="hd-stat-val">${d2.gf}</div><div class="hd-stat-lbl">${t2} golü</div></div>
+    <div class="hd-stat"><div class="hd-stat-val">${tot}</div><div class="hd-stat-lbl">Toplam ma\u00e7</div></div>
+    <div class="hd-stat"><div class="hd-stat-val">${d.gf}</div><div class="hd-stat-lbl">${t1} gol\u00fc</div></div>
+    <div class="hd-stat"><div class="hd-stat-val">${d2.gf}</div><div class="hd-stat-lbl">${t2} gol\u00fc</div></div>
     <div style="flex-basis:100%;margin-top:4px">
       <div class="hd-bar-labels">
-        <span style="color:${txtClr(t1)}">${t1} — ${wr1}%</span>
+        <span style="color:${txtClr(t1)}">${t1} \u2014 ${wr1}%</span>
         <span style="color:var(--txt3);font-size:10px">${Math.round(d.d/tot*100)}% BER</span>
-        <span style="color:${txtClr(t2)}">${wr2}% — ${t2}</span>
+        <span style="color:${txtClr(t2)}">${wr2}% \u2014 ${t2}</span>
       </div>
       <div class="hd-bar" style="display:flex;gap:2px">
-        <div style="height:100%;border-radius:3px 0 0 3px;width:${wr1}%;background:${barClr(t1)};flex-shrink:0"></div>
+        <div style="height:100%;border-radius:3px 0 0 3px;width:${wr1}%;background:${CLR[t1]};flex-shrink:0"></div>
         <div style="height:100%;width:${Math.round(d.d/tot*100)}%;background:var(--txt3);flex-shrink:0"></div>
-        <div style="height:100%;border-radius:0 3px 3px 0;width:${wr2}%;background:${barClr(t2)};flex-shrink:0;margin-left:auto"></div>
+        <div style="height:100%;border-radius:0 3px 3px 0;width:${wr2}%;background:${CLR[t2]};flex-shrink:0;margin-left:auto"></div>
       </div>
     </div>
     <div style="flex-basis:100%;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
-      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">Karşılaşmalar</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">KAR\u015eILA\u015eMALAR</div>
       <div style="overflow-x:auto;width:100%"><div class="mlist" style="min-width:max-content;width:100%">${matchRows}</div></div>
     </div>`;
   document.getElementById('hdet').classList.add('vis');
@@ -505,6 +520,29 @@ function renderMatches(){
 }
 
 buildOverview();buildSeasons();buildH2H();
+</script>
+
+<div id="bl-tooltip"></div>
+<script>
+(function(){
+  var tip=document.getElementById('bl-tooltip');
+  document.addEventListener('mouseover',function(e){
+    var el=e.target.closest('.trophy-tip');
+    if(!el){tip.style.display='none';return;}
+    tip.textContent=el.dataset.tip;
+    tip.style.display='block';
+  });
+  document.addEventListener('mousemove',function(e){
+    tip.style.left=e.clientX+'px';
+    tip.style.top=(e.clientY-36)+'px';
+  });
+  document.addEventListener('mouseout',function(e){
+    if(e.target.closest('.trophy-tip')&&!(e.relatedTarget&&e.relatedTarget.closest('.trophy-tip')))
+      tip.style.display='none';
+  });
+  window.addEventListener('scroll',function(){tip.style.display='none';},true);
+  window.addEventListener('resize',function(){tip.style.display='none';});
+})();
 </script>
 </body>
 </html>
