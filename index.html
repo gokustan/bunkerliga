@@ -74,7 +74,9 @@ body{background:
 .champ-row{display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;transition:border-color .2s;flex-wrap:nowrap}
 .champ-row:hover{border-color:var(--border2)}
 .champ-row.winner{border-color:rgba(245,200,66,0.2)}
-.champ-badge{font-family:"Bebas Neue",sans-serif;font-size:11px;letter-spacing:0.12em;color:var(--txt3);min-width:120px;flex-shrink:0}
+.champ-info{display:flex;flex-direction:column;gap:2px;min-width:130px;flex-shrink:0}
+.champ-badge{font-family:"Bebas Neue",sans-serif;font-size:13px;letter-spacing:0.12em;color:var(--txt2);line-height:1.1;white-space:nowrap}
+.champ-date{font-size:10px;color:var(--txt3);white-space:nowrap}
 .champ-logo{width:30px;height:30px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4))}
 .champ-logo-dot{width:30px;height:30px;border-radius:50%;flex-shrink:0}
 .champ-team{font-size:14px;font-weight:600;color:var(--txt)}
@@ -196,10 +198,6 @@ table.h2h{border-collapse:collapse;min-width:520px;width:100%;font-size:12px}
   <div class="champs" id="champ-list"></div>
   <div class="stitle">GENEL PERFORMANS</div>
   <div class="overall-grid" id="overall-grid"></div>
-  <div class="chart-wrap">
-    <div class="chart-title">KUPA SAYISI</div>
-    <div style="position:relative;height:180px"><canvas id="cupsChart"></canvas></div>
-  </div>
 </div>
 
 <div id="tab-se" class="panel">
@@ -216,7 +214,6 @@ table.h2h{border-collapse:collapse;min-width:520px;width:100%;font-size:12px}
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 const LOGOS = {
 "Göktuğspor":"https://i.imgur.com/oRpA80L.png",
@@ -296,16 +293,13 @@ function buildOverview(){
   CHAMPS.forEach(ch=>{
     if(ch.c){
       cl.innerHTML+=`<div class="champ-row winner">
-        <span class="champ-badge">${ch.s}</span>
-        <span style="font-size:10px;color:var(--txt3);white-space:nowrap;flex-shrink:0">${ch.d}</span>
+        <div class="champ-info"><span class="champ-badge">${ch.s}</span><span class="champ-date">${ch.d}</span></div>
         ${logo(ch.c,30)}
         <span class="champ-team">${ch.c}</span>
-        <span class="champ-trophy">🏆</span>
       </div>`;
     }else{
       cl.innerHTML+=`<div class="champ-row scandal">
-        <span class="champ-badge">${ch.s}</span>
-        <span style="font-size:10px;color:var(--txt3);white-space:nowrap;flex-shrink:0">${ch.d}</span>
+        <div class="champ-info"><span class="champ-badge">${ch.s}</span><span class="champ-date">${ch.d}</span></div>
         <span style="font-size:16px">⚠️</span>
         <span class="champ-note">${ch.note}</span>
       </div>`;
@@ -331,17 +325,7 @@ function buildOverview(){
     </div>`;
   });
 
-  // Chart
-  new Chart(document.getElementById('cupsChart'),{
-    type:'bar',
-    data:{labels:TEAMS,datasets:[{data:TEAMS.map(t=>CUPS[t]),backgroundColor:TEAMS.map(t=>CLR[t]+'55'),borderColor:TEAMS.map(t=>CLR[t]),borderWidth:2,borderRadius:6}]},
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
-      scales:{
-        y:{beginAtZero:true,ticks:{stepSize:1,color:'#9096aa',font:{family:'"DM Sans"',size:11}},grid:{color:'rgba(0,0,0,0.05)'},border:{color:'transparent'}},
-        x:{ticks:{color:'#4a5068',font:{family:'"DM Sans"',size:11}},grid:{display:false},border:{color:'transparent'}}
-      }
-    }
-  });
+
 }
 
 // SEASONS
