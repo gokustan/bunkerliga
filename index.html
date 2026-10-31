@@ -427,7 +427,6 @@ function showH2H(t1,t2){
     sd.matches.forEach(m=>{
       if((m[0]===t1&&m[2]===t2)||(m[0]===t2&&m[2]===t1)){
         const hW=m[1]>m[3],aW=m[3]>m[1];
-        const isI=sName==='5. Bunkerliga'&&m[1]===13&&m[3]===0;
         const tag=sAbbr[sName]||sName;
         matchRows+=`<div class="mrow" style="font-size:12px;padding:6px 10px;width:100%">
           <span style="font-size:10px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;color:var(--txt3);background:var(--bg3);padding:2px 6px;border-radius:4px;min-width:72px;text-align:center;flex-shrink:0">${tag}</span>
@@ -440,7 +439,6 @@ function showH2H(t1,t2){
             <img src="${LOGOS[m[2]]||''}" width="15" height="15" style="object-fit:contain;flex-shrink:0" onerror="this.style.display='none'" alt="">
             <span style="white-space:nowrap">${tAbbr[m[2]]||m[2]}</span>
           </div>
-          ${isI?'<span class="mike">\u26a0 \u015e\u0130KE</span>':''}
         </div>`;
       }
     });
@@ -467,7 +465,7 @@ function showH2H(t1,t2){
     </div>
     <div style="flex-basis:100%;margin-top:12px;border-top:1px solid var(--border);padding-top:12px">
       <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">KAR\u015eILA\u015eMALAR</div>
-      <div style="overflow-x:auto;width:100%"><div class="mlist" style="min-width:max-content;width:100%">${matchRows}</div></div>
+      <div style="overflow-x:auto;width:100%"><div class="mlist" style="width:100%">${matchRows}</div></div>
     </div>`;
   document.getElementById('hdet').classList.add('vis');
 }
